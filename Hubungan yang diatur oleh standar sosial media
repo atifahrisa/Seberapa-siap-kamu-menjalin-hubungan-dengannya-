@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seberapa Siap Kamu untuk Sebuah Hubungan?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-section {
+            display: none;
+        }
+
+        .question-section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-number {
+            color: #764ba2;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 20px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f9f9f9;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .note {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 4px solid #ffc107;
+            font-size: 14px;
+            color: #856404;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-section {
+            display: none;
+            text-align: center;
+        }
+
+        .result-section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .percentage-circle {
+            width: 200px;
+            height: 200px;
+            margin: 30px auto;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .result-title {
+            font-size: 24px;
+            margin: 20px 0;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .result-description {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #555;
+            margin: 20px 0;
+            text-align: left;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 12px;
+        }
+
+        .share-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .share-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: transform 0.2s;
+            color: white;
+        }
+
+        .share-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .share-btn.whatsapp {
+            background: #25D366;
+        }
+
+        .share-btn.twitter {
+            background: #1DA1F2;
+        }
+
+        .share-btn.copy {
+            background: #6c757d;
+        }
+
+        .webhook-status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .webhook-status.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .webhook-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .question-text {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+
+        <!-- Halaman 1: Tentang Kamu -->
+        <div id="page1" class="question-section active">
+            <h1>Seberapa Siap Kamu untuk Sebuah Hubungan?</h1>
+            <p class="subtitle">Bukan tes cinta, bukan ramalan jodoh. Ini ruang jujur buat kamu yang capek dikontrol standar sosmed dan ingin menilai perasaan dengan kepala sendiri.</p>
+            
+            <div id="questionsContainer1"></div>
+        </div>
+
+        <!-- Halaman 2: Tentang Dia -->
+        <div id="page2" class="question-section">
+            <h1>Seberapa Kamu Benar-Benar Mengenal Dia?</h1>
+            <div class="note">
+                <strong>Catatan penting:</strong> Jika kamu ragu menjawabnya, itu juga jawaban.
+            </div>
+            
+            <div id="questionsContainer2"></div>
+        </div>
+
+        <!-- Halaman Hasil -->
+        <div id="resultPage" class="result-section">
+            <h1>Hasil Quiz Kamu</h1>
+            <div class="percentage-circle" id="percentageCircle">
+                <span id="percentageText">0%</span>
+            </div>
+            <div class="result-title" id="resultTitle"></div>
+            <div class="result-description" id="resultDescription"></div>
+
+            <div class="share-section">
+                <div class="share-title">Bagikan hasil kamu atau ajak teman ikut quiz!</div>
+                <div class="share-buttons">
+                    <button class="share-btn whatsapp" onclick="shareWhatsApp()">📱 WhatsApp</button>
+                    <button class="share-btn twitter" onclick="shareTwitter()">🐦 Twitter</button>
+                    <button class="share-btn copy" onclick="copyLink()">📋 Copy Link</button>
+                </div>
+            </div>
+
+            <div class="webhook-status" id="webhookStatus"></div>
+
+            <button class="btn" onclick="restartQuiz()">Mulai Ulang Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        // MASUKKAN DISCORD WEBHOOK URL DI SINI
+        const DISCORD_WEBHOOK_URL = 'https://discordapp.com/api/webhooks/1461067879679000620/I1cEocjMoJfqBBvUokf5_aruw3WEO71tysh6MYVV6WMWl_8FCP5VvEfnlR5M8E5FVh80'; // Contoh: 'https://discord.com/api/webhooks/1234567890/abcdefghijklmnop'
+
+        const questions1 = [
+            {
+                question: "Saat tertarik dengan seseorang, kamu lebih sering:",
+                options: ["Membayangkan versi idealnya di kepala", "Mengamati sikap & tindakan nyatanya"]
+            },
+            {
+                question: "Kalau dia tidak sesuai ekspektasimu:",
+                options: ["Berharap dia berubah", "Bertanya apakah kamu bisa menerima"]
+            },
+            {
+                question: "Kamu ingin menjalin hubungan karena:",
+                options: ["Takut ketinggalan / semua orang punya pasangan", "Ingin tumbuh bersama seseorang"]
+            },
+            {
+                question: "Saat melihat pasangan \"sempurna\" di media sosial:",
+                options: ["Membandingkan hidupmu", "Menyadari itu hanya potongan cerita"]
+            },
+            {
+                question: "Kalau ada konflik:",
+                options: ["Menghindar atau diam", "Ingin bicara dan mencari solusi"]
+            },
+            {
+                question: "Kamu mengenal dirimu sebagai:",
+                options: ["Masih bingung dengan kebutuhan emosional sendiri", "Cukup paham batasan & kebutuhan diri"]
+            },
+            {
+                question: "Dalam hubungan, menurutmu yang paling penting:",
+                options: ["Validasi & perhatian", "Rasa aman & komunikasi"]
+            },
+            {
+                question: "Kamu tertarik karena:",
+                options: ["Dia terlihat \"worth it\" di mata orang lain", "Kamu nyaman menjadi diri sendiri dengannya"]
+            },
+            {
+                question: "Saat merasa cemburu:",
+                options: ["Langsung bereaksi", "Mencari akar perasaan itu"]
+            },
+            {
+                question: "Menjalin hubungan bagimu adalah:",
+                options: ["Status", "Komitmen & proses"]
+            }
+        ];
+
+        const questions2 = [
+            {
+                question: "Kamu tahu bagaimana dia bereaksi saat stres?",
+                options: ["Tidak benar-benar tahu", "Tahu dari cerita atau pengalaman langsung"]
+            },
+            {
+                question: "Saat dia lelah atau sedih, biasanya dia:",
+                options: ["Menutup diri", "Mencari distraksi / cerita (pilih yang paling kamu yakini)"]
+            },
+            {
+                question: "Kamu tahu nilai hidup yang dia pegang?",
+                options: ["Belum pernah dibicarakan", "Pernah ia sampaikan secara langsung"]
+            },
+            {
+                question: "Cara dia menyelesaikan masalah biasanya:",
+                options: ["Menghindari", "Menghadapi"]
+            },
+            {
+                question: "Kamu tahu hal kecil yang bisa membuatnya kesal?",
+                options: ["Tidak", "Ya"]
+            },
+            {
+                question: "Kamu tahu mimpi atau tujuan hidupnya?",
+                options: ["Hanya dari media sosial", "Dari percakapan pribadi"]
+            },
+            {
+                question: "Saat berbeda pendapat, dia cenderung:",
+                options: ["Defensif", "Mendengarkan"]
+            },
+            {
+                question: "Kamu pernah melihat sisi buruknya?",
+                options: ["Belum / hanya sisi baik", "Pernah dan menyadarinya"]
+            },
+            {
+                question: "Kamu tertarik padanya karena:",
+                options: ["Imagenya", "Cara dia bersikap sehari-hari"]
+            },
+            {
+                question: "Jika dia tidak berubah sama sekali, kamu:",
+                options: ["Berharap suatu saat dia akan berubah", "Bisa menerima atau memilih pergi"]
+            }
+        ];
+
+        let currentPage = 1;
+        let currentQuestion = 0;
+        let answers = { page1: [], page2: [] };
+
+        function renderQuestions(pageNum) {
+            const questions = pageNum === 1 ? questions1 : questions2;
+            const container = document.getElementById(`questionsContainer${pageNum}`);
+            
+            const html = questions.map((q, index) => `
+                <div class="question-item" data-question="${index}">
+                    <div class="question-number">Pertanyaan ${index + 1} dari ${questions.length}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options">
+                        <div class="option" onclick="selectAnswer(${pageNum}, ${index}, 0)">
+                            <strong>A.</strong> ${q.options[0]}
+                        </div>
+                        <div class="option" onclick="selectAnswer(${pageNum}, ${index}, 1)">
+                            <strong>B.</strong> ${q.options[1]}
+                        </div>
+                    </div>
+                    <button class="btn" onclick="nextQuestion(${pageNum}, ${index})" disabled id="btn-${pageNum}-${index}">
+                        ${index === questions.length - 1 ? (pageNum === 1 ? 'Lanjut ke Bagian 2' : 'Lihat Hasil') : 'Pertanyaan Selanjutnya'}
+                    </button>
+                </div>
+            `).join('');
+            
+            container.innerHTML = html;
+            showQuestion(pageNum, 0);
+        }
+
+        function showQuestion(pageNum, questionIndex) {
+            const container = document.getElementById(`questionsContainer${pageNum}`);
+            const questions = container.querySelectorAll('.question-item');
+            questions.forEach((q, i) => {
+                q.style.display = i === questionIndex ? 'block' : 'none';
+            });
+            updateProgress();
+        }
+
+        function selectAnswer(pageNum, questionIndex, answerIndex) {
+            const page = `page${pageNum}`;
+            answers[page][questionIndex] = answerIndex;
+            
+            const container = document.getElementById(`questionsContainer${pageNum}`);
+            const options = container.querySelectorAll(`.question-item[data-question="${questionIndex}"] .option`);
+            options.forEach((opt, i) => {
+                opt.classList.toggle('selected', i === answerIndex);
+            });
+            
+            document.getElementById(`btn-${pageNum}-${questionIndex}`).disabled = false;
+        }
+
+        function nextQuestion(pageNum, questionIndex) {
+            const questions = pageNum === 1 ? questions1 : questions2;
+            
+            if (questionIndex < questions.length - 1) {
+                showQuestion(pageNum, questionIndex + 1);
+            } else {
+                if (pageNum === 1) {
+                    currentPage = 2;
+                    document.getElementById('page1').classList.remove('active');
+                    document.getElementById('page2').classList.add('active');
+                    renderQuestions(2);
+                } else {
+                    calculateResult();
+                }
+            }
+        }
+
+        function updateProgress() {
+            const totalQuestions = 20;
+            const answeredQuestions = answers.page1.length + answers.page2.length;
+            const progress = (answeredQuestions / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function calculateResult() {
+            const score1 = answers.page1.reduce((sum, ans) => sum + ans, 0);
+            const score2 = answers.page2.reduce((sum, ans) => sum + ans, 0);
+            const totalScore = score1 + score2;
+            const percentage = (totalScore / 20) * 100;
+            
+            displayResult(percentage);
+            sendToDiscord(percentage, totalScore);
+        }
+
+        function displayResult(percentage) {
+            document.getElementById('page2').classList.remove('active');
+            document.getElementById('resultPage').classList.add('active');
+            
+            const circle = document.getElementById('percentageCircle');
+            const percentText = document.getElementById('percentageText');
+            
+            // Animasi percentage
+            let currentPercentage = 0;
+            const interval = setInterval(() => {
+                if (currentPercentage >= percentage) {
+                    clearInterval(interval);
+                } else {
+                    currentPercentage += 2;
+                    percentText.textContent = Math.min(currentPercentage, percentage) + '%';
+                }
+            }, 30);
+            
+            // Warna gradient dari merah ke hijau
+            const hue = (percentage / 100) * 120;
+            circle.style.background = `linear-gradient(135deg, hsl(${hue}, 70%, 50%), hsl(${hue + 20}, 70%, 60%))`;
+            
+            // Hasil dan motivasi
+            let title, description;
+            if (percentage <= 20) {
+                title = "Kamu sedang jatuh pada bayangan, bukan orangnya";
+                description = "Perasaanmu valid, tapi mungkin kamu lebih mencintai versi ideal daripada realita. Pelan-pelan, kenali dulu dirimu dan dia. Tidak ada yang salah dengan jatuh cinta, tapi cinta yang sehat dimulai dari pemahaman yang nyata. Gunakan waktu ini untuk introspeksi dan mengenal diri sendiri lebih dalam.";
+            } else if (percentage <= 40) {
+                title = "Ada rasa, tapi belum ada pemahaman";
+                description = "Ini bukan gagal—ini tanda untuk berhenti berasumsi dan mulai mengenal. Kamu punya ketertarikan yang tulus, tapi hubungan yang sehat butuh lebih dari sekadar rasa. Mulailah dengan percakapan yang lebih dalam, tanyakan hal-hal yang penting, dan biarkan hubungan tumbuh secara alami. Setiap langkah kecil adalah kemajuan.";
+            } else if (percentage <= 60) {
+                title = "Kamu mulai sadar, tapi masih setengah jalan";
+                description = "Hubungan bukan soal cepat, tapi soal tepat. Teruskan jika mau belajar. Kamu sudah menunjukkan kesadaran yang baik tentang diri sendiri dan orang yang kamu sukai. Terus pelajari satu sama lain, komunikasi adalah kunci. Jangan terburu-buru, karena fondasi yang kuat membutuhkan waktu untuk dibangun.";
+            } else if (percentage <= 80) {
+                title = "Kamu cukup matang & cukup mengenal";
+                description = "Kecocokan bukan tanpa masalah, tapi soal kesiapan menghadapi masalah bersama. Kamu menunjukkan tingkat kematangan emosional yang baik dan pemahaman yang cukup dalam. Ingat, tidak ada hubungan yang sempurna, tapi hubungan yang sehat adalah yang dibangun dengan komitmen untuk terus belajar dan berkembang bersama. Terus pertahankan komunikasi dan kejujuran.";
+            } else {
+                title = "Kamu tidak dikendalikan standar sosial media";
+                description = "Kamu memilih dengan sadar, bukan karena validasi. Apapun hasil akhirnya, kamu sudah menang. Kamu menunjukkan kematangan emosional yang luar biasa dan pemahaman yang mendalam tentang diri sendiri dan orang yang kamu sukai. Kamu tidak terburu-buru dan tidak terpengaruh oleh ekspektasi eksternal. Ini adalah fondasi yang sangat kuat untuk hubungan yang sehat. Terus pertahankan kejujuran, komunikasi, dan rasa hormat ini.";
+            }
+            
+            document.getElementById('resultTitle').textContent = title;
+            document.getElementById('resultDescription').textContent = description;
+        }
+
+        async function sendToDiscord(percentage, totalScore) {
+            if (!DISCORD_WEBHOOK_URL) {
+                console.log('Discord webhook tidak diatur');
+                return;
+            }
+
+            const statusDiv = document.getElementById('webhookStatus');
+            
+            try {
+                const embed = {
+                    title: "📊 Hasil Quiz Kecocokan Baru!",
+                    color: percentage >= 70 ? 0x00ff00 : percentage >= 40 ? 0xffff00 : 0xff0000,
+                    fields: [
+                        {
+                            name: "Persentase Kecocokan",
+                            value: `${percentage}%`,
+                            inline: true
+                        },
+                        {
+                            name: "Skor Total",
+                            value: `${totalScore}/20`,
+                            inline: true
+                        },
+                        {
+                            name: "Tentang Diri",
+                            value: `${answers.page1.reduce((sum, ans) => sum + ans, 0)}/10`,
+                            inline: true
+                        },
+                        {
+                            name: "Tentang Pasangan",
+                            value: `${answers.page2.reduce((sum, ans) => sum + ans, 0)}/10`,
+                            inline: true
+                        }
+                    ],
+                    timestamp: new Date().toISOString(),
+                    footer: {
+                        text: "Quiz Kecocokan Hubungan"
+                    }
+                };
+
+                const response = await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        embeds: [embed]
+                    })
+                });
+
+                if (response.ok) {
+                    statusDiv.className = 'webhook-status success';
+                    statusDiv.textContent = '✅ Hasil berhasil dikirim ke Discord!';
+                } else {
+                    throw new Error('Gagal mengirim ke Discord');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                statusDiv.className = 'webhook-status error';
+                statusDiv.textContent = '❌ Gagal mengirim hasil ke Discord';
+            }
+        }
+
+        function shareWhatsApp() {
+            const text = `Aku baru saja mengikuti Quiz "Seberapa Siap Kamu untuk Sebuah Hubungan?" dan hasilnya menarik! Coba juga yuk! ${window.location.href}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function shareTwitter() {
+            const text = `Aku baru saja mengikuti Quiz "Seberapa Siap Kamu untuk Sebuah Hubungan?" Coba juga!`;
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`, '_blank');
+        }
+
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Link berhasil disalin! ✅');
+            });
+        }
+
+        function restartQuiz() {
+            currentPage = 1;
+            currentQuestion = 0;
+            answers = { page1: [], page2: [] };
+            
+            document.getElementById('resultPage').classList.remove('active');
+            document.getElementById('page1').classList.add('active');
+            renderQuestions(1);
+            updateProgress();
+        }
+
+        // Inisialisasi
+        renderQuestions(1);
+    </script>
+</body>
+</html>
